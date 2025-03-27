@@ -7,9 +7,9 @@ export default function Home() {
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       <header className="text-center mb-10">
-        <div className="flex items-center justify-center gap-6 mb-4">
-          <div className="from-blue-600 rounded-lg ">
-            <StratosLogo color="#3B82F6" width={300} height={80} />
+        <div className="flex flex-col md:flex-row items-center justify-center gap-4 mb-2">
+          <div className="from-blue-600 rounded-lg">
+            <StratosLogo color="#3B82F6" width={200} height={34} />
           </div>
           <h1 className="text-4xl font-bold text-gray-800 bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
             Secure File Drop
