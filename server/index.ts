@@ -60,7 +60,7 @@ app.use((req, res, next) => {
   // this serves both the API and the client.
   // It is the only port that is not firewalled.
   const PORT = process.env.PORT || 3003;
-  app.listen(PORT, 'localhost', () => {
+  app.listen(PORT, () => {
     console.log('Server is running on port ' + PORT);
   });
 })();
