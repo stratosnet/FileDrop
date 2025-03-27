@@ -56,11 +56,14 @@ export default function UploadItem({
           <div className="bg-gray-50 rounded-lg p-3 flex flex-col sm:flex-row sm:items-center gap-3">
             <div className="flex-grow min-w-0">
               <p className="text-xs text-gray-500 mb-1">Shareable Link:</p>
-              <div className="font-mono text-sm bg-white p-2 rounded border border-gray-200 truncate">
-                {upload.shareableLink}
-              </div>
+              <input
+                type="text"
+                value={upload.shareableLink}
+                readOnly
+                className="w-full font-mono text-sm bg-white px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              />
             </div>
-            <div className="flex-shrink-0">
+            <div className="flex-shrink-0 mt-5">
               <button
                 className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center transition-colors w-full sm:w-auto"
                 onClick={handleCopy}
