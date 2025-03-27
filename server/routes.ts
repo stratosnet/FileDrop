@@ -4,16 +4,35 @@ import axios from "axios";
 import multer from "multer";
 import { storage } from "./storage";
 import { fileUploadResponseSchema } from "@shared/schema";
-import { access } from "fs/promises";
+import fs from 'fs';
+import * as fsPromises from 'fs/promises';
+import path from 'path';
 
-// Configure multer for memory storage
+// Create temporary upload directory
+const uploadDir = path.join(process.cwd(), 'temp-uploads');
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+// Configure multer to use disk storage
 const upload = multer({
-  storage: multer.memoryStorage(),
+  storage: multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, uploadDir);
+    },
+    filename: (req, file, cb) => {
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+      cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+    }
+  }),
   limits: {
     fileSize: 100 * 1024 * 1024, // 100MB limit
   },
 });
 
+// !!! important:
+// please check if you have the Access Token
+// if not, please contact the team to get the Access Token
 if (!process.env.SDS_GATEWAY_ACCESS_TOKEN) {
   throw new Error("Environment variable SDS_GATEWAY_ACCESS_TOKEN is not set or is empty");
 }
@@ -26,51 +45,49 @@ const config = {
 };
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // API endpoint for file uploads
+  // Upload route handler
   app.post('/api/upload', upload.single('file'), async (req, res) => {
-    console.log('Request received'); // Check if route is triggered
-    console.log('Headers:', req.headers); // View all request headers
-    console.log('Body:', req.body); // View request body
-    console.log('File:', req.file); // View file information
-
-    
+    const filePath = req.file.path;
     const kuboApiUrl = `${config.baseUrl}${config.path}/${config.accessToken}/api/v0/add`;
     console.log('Generated URL:', kuboApiUrl); // Debug log
 
     try {
-      // Send request using axios
-      // const formData = new FormData();
-      // formData.append('file', req.file.buffer);
-
+      // Create file stream for upload
       const file = req.file;
-      // Create a FormData object to send to the SPFS API
       const formData = new FormData();
-      // Convert buffer to blob
-      const blob = new Blob([file.buffer], { type: file.mimetype });
+
+      // Read file content
+      const fileBuffer = await fsPromises.readFile(filePath);
+      const blob = new Blob([fileBuffer], { type: file.mimetype });
       formData.append('file', blob, file.originalname);
 
-
-
-      
       const response = await axios({
         method: 'post',
         url: kuboApiUrl,
         data: formData,
-        // headers: {
-        //   ...formData.getHeaders(),
-        // },
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-
       res.json(response.data);
     } catch (error) {
+      
       console.error('Server error:', error);
       res.status(500).json({ 
         error: 'Upload failed',
-        url: kuboApiUrl  // Add generated URL to error response
+        url: kuboApiUrl
       });
+    }finally{
+      // Cleanup function for temporary files
+      if (req.file) {
+        try {
+          await fsPromises.unlink(req.file.path);
+          console.error('Succes deleting temp file:', req.file.path);
+        } catch (unlinkError) {
+          console.error('Error deleting temp file:', unlinkError);
+        }
+      }
+
     }
   });
 
@@ -92,3 +109,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
   return httpServer;
 }
+
+
+
+
