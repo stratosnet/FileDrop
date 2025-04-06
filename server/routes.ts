@@ -48,12 +48,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Upload route handler
   app.post('/api/upload', upload.single('file'), async (req, res) => {
     const filePath = req.file.path;
+    const file = req.file;
     const kuboApiUrl = `${config.baseUrl}${config.path}/${config.accessToken}/api/v0/add`;
     console.log('Generated URL:', kuboApiUrl); // Debug log
 
     try {
       // Create file stream for upload
-      const file = req.file;
+     //check if file is uploaded and length is greater than 0
+      if (!file || file.length === 0) {
+         return res.status(400).json({ error: 'No file uploaded' });
+      }
       const formData = new FormData();
 
       // Read file content
@@ -74,8 +78,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       console.error('Server error:', error);
       res.status(500).json({ 
-        error: 'Upload failed',
-        url: kuboApiUrl
+        error: 'Upload failed!',
+        url: "api/v0/add/" +file.originalname
       });
     }finally{
       // Cleanup function for temporary files
