@@ -73,6 +73,17 @@ export default function UploadItem({
               </button>
             </div>
           </div>
+          <div className="flex items-center text-green-500 mb-2">
+            <p className="text-xs text-gray-500 mb-1">Created At:</p>
+            <p
+              className="text-xs text-gray-500 mb-1   "
+              style={{ marginLeft: 5 }}
+            >
+              {upload.createdAt
+                ? new Date(upload.createdAt).toLocaleString()
+                : "N/A"}
+            </p>
+          </div>
         </div>
       )}
 

@@ -1,5 +1,6 @@
 import FileUploader from "@/components/FileUploader";
 import GoogleAd from "@/components/GoogleAd";
+import { Link } from "react-router-dom";
 import { Github } from "lucide-react";
 import { StratosLogo } from "@/components/StratosLogo";
 
@@ -14,6 +15,20 @@ export default function Home() {
           <h1 className="text-4xl font-bold text-gray-800 bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
             Secure File Drop
           </h1>
+          <Link
+            to="/myspace"
+            className={`bg-gray-600 
+                  hover:bg-gray-700
+                  inline-flex items-center justify-center
+                  px-4 py-2 rounded-md
+                  text-white font-semibold text-sm
+                  shadow-md hover:shadow-lg
+                  transition-all duration-200 ease-in-out
+                  hover:scale-105
+                  hover:brightness-110`}
+          >
+            MY SPACE
+          </Link>
         </div>
         <p className="text-gray-600 max-w-2xl mx-auto">
           Securely share files with no login, no tracking, and no centralized

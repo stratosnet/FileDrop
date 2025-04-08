@@ -23,6 +23,7 @@ export const uploadStatusSchema = z.object({
   cid: z.string().nullable(),
   shareableLink: z.string().nullable(),
   errorMessage: z.string().nullable(),
+  createdAt: z.string().nullable(),
 });
 
 export type UploadStatus = z.infer<typeof uploadStatusSchema>;
