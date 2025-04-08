@@ -3,6 +3,7 @@ import GoogleAd from "@/components/GoogleAd";
 import { Link } from "react-router-dom";
 import { Github } from "lucide-react";
 import { StratosLogo } from "@/components/StratosLogo";
+import HistoryList from "./HistoryList";
 
 export default function Home() {
   return (
@@ -15,7 +16,7 @@ export default function Home() {
           <h1 className="text-4xl font-bold text-gray-800 bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
             Secure File Drop
           </h1>
-          <Link
+          {/* <Link
             to="/myspace"
             className={`bg-gray-600 
                   hover:bg-gray-700
@@ -27,8 +28,8 @@ export default function Home() {
                   hover:scale-105
                   hover:brightness-110`}
           >
-            MY SPACE
-          </Link>
+            History
+          </Link> */}
         </div>
         <p className="text-gray-600 max-w-2xl mx-auto">
           Securely share files with no login, no tracking, and no centralized
@@ -40,6 +41,8 @@ export default function Home() {
       </header>
 
       <FileUploader />
+
+      <HistoryList refresh={true} />
 
       <footer className="mt-16 py-6 border-t border-gray-200">
         <div className="flex flex-col md:flex-row justify-between items-center">

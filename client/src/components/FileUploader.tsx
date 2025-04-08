@@ -36,7 +36,7 @@ export default function FileUploader({
       };
 
       // Add to uploads array
-      setUploads((prevUploads) => [...prevUploads, newUpload]);
+      setUploads((prevUploads) => [newUpload, ...prevUploads]);
 
       if (onUploadStart) {
         onUploadStart();
@@ -281,21 +281,23 @@ export default function FileUploader({
 
       {/* Upload Status */}
       {showUploadStatus && (
-        <div className="mb-8 bg-white rounded-lg shadow-sm p-6">
+        <div className=" bg-white rounded-lg shadow-sm p-6">
           <h3 className="text-lg font-semibold mb-4">Upload Status</h3>
 
-          {uploads.map((upload) => (
-            <UploadItem
-              key={upload.id}
-              upload={upload}
-              onRetry={() => handleRetry(upload.id)}
-              onCopy={handleCopy}
-            />
+          {uploads.map((upload, index) => (
+            <div key={upload.id}>
+              <UploadItem
+                key={upload.id}
+                upload={upload}
+                onRetry={() => handleRetry(upload.id)}
+                onCopy={handleCopy}
+              />
+              {/* add  <InfoAlert / >  after the  first UploadItem */}
+              {index === 0 && <InfoAlert />}
+            </div>
           ))}
         </div>
       )}
-
-      <InfoAlert />
     </main>
   );
 }
