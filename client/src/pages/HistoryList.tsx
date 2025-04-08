@@ -60,7 +60,6 @@ const HistoryList: React.FC<HistoryListProps> = ({ refresh }) => {
         </div>
       ) : (
         <div className="grid grid-cols-1 ">
-          {/* 如果 showMoreHistory 为 true，显示所有文件，否则只显示前 10 个文件 */}
           {files.slice(0, limit).map((file) => (
             <UploadItem
               key={file.id}
